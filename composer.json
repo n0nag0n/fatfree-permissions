@@ -1,0 +1,20 @@
+{
+    "name": "n0nag0n/fatfree-permissions",
+    "description": "A permissions module for your Fat-Free app to help with custom permissions.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "n0nag0n",
+            "email": "n0nag0n@sky-9.com"
+        }
+	],
+	"autoload": {
+		"psr-4": {
+			"n0nag0n\\": "src/"
+		}
+	},
+    "require": {
+        "bcosca/fatfree-core": "^3.7"
+    }
+}
