@@ -69,9 +69,11 @@ $current_role = 'manager';
 
 // setup permissions in a CRUD like context
 $Permissions = \n0nag0n\Permissions::instance($current_role);
-$Permissions->defineRule('order', function(Base $f3, $current_role) {
+
+// additionally you can inject additional dependencies into the closure/class->method
+$Permissions->defineRule('order', function(Base $f3, $current_role, My_Dependency $My_Dependency = null) {
 	$allowed_permissions = [ 'read' ]; // everyone can view an order
-	if($current_role === 'manager') {
+	if($current_role === 'manager' && $My_Dependency->something === 'something') {
 		$allowed_permissions[] = 'create'; // managers can create orders
 	}
 	$some_special_toggle_from_db = $f3->get('DB')->exec('SELECT some_special_toggle FROM settings WHERE id = ?', [ $f3->get('SESSION.user_id') ])[0]['some_special_toggle'];
@@ -94,13 +96,30 @@ Now the fun part comes when you want to check if a user has a certain permission
 <?php
 
 public function deleteOrder(Base $f3, array $args = []) {
-	// check if the user is logged in
-	if (!$f3->get('Permissions')->can('order.delete')) {
-		// if not, redirect them to the login page
+
+	$My_Dependency = new My_Dependency('something');
+
+	// check if the user can delete an order
+	// notice where you inject the dependency
+	if (!$f3->get('Permissions')->can('order.delete', $My_Dependency)) {
+		// if not, redirect them to the orders page gracefully
 		$f3->reroute('/orders');
 	}
 	// otherwise, delete the order page
 	// ...
+}
+```
+
+### Injecting dependencies
+As you can see in the example above, you can inject dependencies into the closure that defines the permissions. This is useful if you have some sort of toggle that you want to check against. The same works for Class->Method type calls, except you define the method as such:
+```php
+namespace MyApp;
+
+class Permissions {
+
+	public function order(Base $f3, string $current_role, My_Dependency $My_Dependency = null) {
+		// ... code
+	}
 }
 ```
 

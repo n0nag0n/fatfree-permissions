@@ -103,9 +103,10 @@ class Permissions extends \Prefab {
 	 *
 	 * @param string $permission the permission to check. This can be the rule you defined, or a permission.action
 	 * 		e.g. 'video.create' or 'video' depending on how you setup the callback.
+	 * @param mixed $additional_args any additional arguments to pass to the callback or method.
 	 * @return bool
 	 */
-	public function can(string $permission): bool {
+	public function can(string $permission, ...$additional_args): bool {
 		$allowed = false;
 		$action = '';
 		if(strpos($permission, '.') !== false) {
@@ -120,9 +121,9 @@ class Permissions extends \Prefab {
 		}
 		$executed_permissions = null;
 		if(is_callable($permissions_raw) === true) {
-			$executed_permissions = $permissions_raw($this->f3, $this->current_role);
+			$executed_permissions = $permissions_raw($this->f3, $this->current_role, ...$additional_args);
 		} else if(is_string($permissions_raw) === true) {
-			$executed_permissions = $this->f3->call($permissions_raw, [ $this->f3, $this->current_role ]);
+			$executed_permissions = $this->f3->call($permissions_raw, [ $this->f3, $this->current_role, ...$additional_args ]);
 		}
 
 		if(is_array($executed_permissions) === true) {
