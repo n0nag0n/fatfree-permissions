@@ -37,6 +37,8 @@ $Permissions->defineRule('logged_in', function(Base $f3, $current_role) {
 
 // You'll likely want to attach to this the hive
 $f3->set('Permissions', $Permissions);
+// or you can just call it on it's own cause it extends itself
+// \n0nag0n\Permissions::instance()->can('somePermission');
 
 $f3->run();
 ```
