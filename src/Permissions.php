@@ -138,11 +138,12 @@ class Permissions extends \Prefab {
 	/**
 	 * Alias for can. Sometimes it's nice to say has instead of can
 	 *
-	 * @param string $permission [description]
+	 * @param string $permission Your permission to check
+	 * @param mixed $additional_args any additional arguments to pass to the callback or method.
 	 * @return boolean
 	 */
-	public function has(string $permission): bool {
-		return $this->can($permission);
+	public function has(string $permission, ...$additional_args): bool {
+		return $this->can($permission, ...$additional_args);
 	}
 
 	/**
