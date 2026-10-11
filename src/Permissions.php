@@ -19,7 +19,7 @@ class Permissions extends \Prefab {
 	 * @param array $config
 	 * @param Base $f3
 	 */
-	public function __construct(string $current_role = '', array $config = null, \Base $f3 = null) {
+	public function __construct(string $current_role = '', ?array $config = null, ?\Base $f3 = null) {
 		$this->f3 = $f3 === null ? \Base::instance() : $f3;
 		$this->current_role = $current_role;
 		if($config !== null) {
